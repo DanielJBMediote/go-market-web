@@ -1,0 +1,50 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Next.js: dev (Turbopack)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "npm run dev -- --turbo",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "presentation": {
+        "group": "Next.js",
+        "order": 1
+      }
+    },
+    {
+      "name": "Next.js: debug server-side (Turbopack)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--", "--turbo"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "port": 9229,
+      "presentation": {
+        "group": "Next.js",
+        "order": 2
+      }
+    },
+    {
+      "name": "Next.js: debug client-side",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}",
+      "sourceMaps": true,
+      "skipFiles": ["<node_internals>/**"],
+      "presentation": {
+        "group": "Next.js",
+        "order": 3
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Next.js: full debug (Turbopack)",
+      "configurations": ["Next.js: debug server-side (Turbopack)", "Next.js: debug client-side"]
+    }
+  ]
+}
