@@ -10,7 +10,7 @@ import { useParams } from "next/navigation";
 import { useEffect } from "react";
 import { DashboardCard } from "../../../../../components/dashboard-card";
 
-export default function Dashboard() {
+export default function StoreDashboardPage() {
   const { id } = useParams();
   const storeId = Number(id);
 

@@ -7,7 +7,7 @@ import { useDashboardMetrics } from "@/hooks/stores/queries";
 import { Tags, TrendingUp } from "lucide-react";
 import { useEffect } from "react";
 
-export default function Dashboard() {
+export default function DashboardPage() {
   const { refetch, data, isFetching } = useDashboardMetrics();
 
   useEffect(() => {

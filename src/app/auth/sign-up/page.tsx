@@ -29,16 +29,16 @@ const signUpSchema = z.object({
   role: z.nativeEnum(Roles),
 });
 
-type SignInType = z.infer<typeof signUpSchema>;
+type SignUpType = z.infer<typeof signUpSchema>;
 
-export default function SignIn() {
+export default function SignUpPage() {
   const router = useRouter();
 
   const methods = useForm({
     resolver: zodResolver(signUpSchema),
   });
 
-  async function handleSignUp(data: SignInType) {
+  async function handleSignUp(data: SignUpType) {
     try {
       const { name, email, password, username, role } = data;
       const response = await UserInstanceApi.create({

@@ -3,15 +3,15 @@ import { Metadata } from "next";
 import { PropsWithChildren } from "react";
 
 export const metadata: Metadata = {
-  title: "Go Market | Stores",
-  description: "Your store list and details of products.",
+  title: "Go Market | Checkout",
+  description: "Checkout details.",
 };
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default function ProductLayout({ children }: PropsWithChildren) {
   return (
     <div className="space-y-6">
       <Header />
-      <div className="px-4 space-y-2">{children}</div>
+      <div className="px-6 py-3">{children}</div>
     </div>
   );
 }

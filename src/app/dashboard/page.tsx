@@ -7,7 +7,7 @@ import { useProductsFeaturedQuery } from "@/hooks/products/queries";
 import { useEffect } from "react";
 import { ProductCard } from "./components/products-card";
 
-export default function Dashboard() {
+export default function DashboardPage() {
   const { filters } = useProductFilters();
   const { data: products, refetch, isFetching } = useProductsFeaturedQuery({ filters });
 

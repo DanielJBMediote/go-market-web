@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { StoreCard } from "./components/card-detail";
 import { StoreFormModal } from "./components/store-form-modal";
 
-export default function Stores() {
+export default function StoresPage() {
   const { openModal } = useModal();
   const { userContext } = useAuthentication();
 

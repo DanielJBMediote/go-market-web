@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import { columns } from "./components/columns";
 import { ProductFormModal } from "./components/product-modal-form";
 
-export default function StoreInfo() {
+export default function StoreProductsPage() {
   const { id } = useParams();
   const storeId = Number(id);
 

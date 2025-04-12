@@ -11,8 +11,8 @@ import { ImageOff, Minus, Plus, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { ProductComments } from "./comments";
-import { SimilarProducSection } from "./similar-product-section";
+import { ProductComments } from "./components/comments";
+import { SimilarProducSection } from "./components/similar-product-section";
 
 export default function ProductDetail() {
   const { id } = useParams();

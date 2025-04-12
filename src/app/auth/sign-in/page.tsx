@@ -4,14 +4,12 @@ import { Button } from "@/components/ui/button";
 import { useAuthentication } from "@/contexts/auth-provider";
 import { ShoppingBag, User } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { SignInForm } from "./form";
 
-export default function SignIn() {
+export default function SignInPage() {
   const { userContext } = useAuthentication();
-  const router = useRouter();
-
-  console.log(userContext);
+  // const router = useRouter();
+  // console.log(userContext);
 
   return (
     <div className="space-y-4 h-full">
