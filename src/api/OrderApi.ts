@@ -19,6 +19,7 @@ export enum OrderStatus {
   CANCELLED = "Canceled", // Pedido cancelado (pelo cliente ou sistema)
   REFUNDED = "Refunded", // Reembolsado (para casos de devolução)
   FAILED = "Failed", // Falha no processamento (ex: pagamento recusado)
+  COMPLETED = "Completed", // Pedido concluído
 }
 
 export interface IOrderItemApi extends IBaseObjectApi {
@@ -30,6 +31,7 @@ export interface IOrderApi extends IBaseObjectApi {
   items: IOrderItemApi[];
   client: IUserApi;
 
+  uuid: string;
   taxes: number;
   discount: number;
   totalAmount: number;
@@ -50,6 +52,7 @@ export interface OrderBody
     | "createdAt"
     | "updatedAt"
     | "status"
+    | "uuid"
     | "client"
     | "deliveredDate"
     | "paymentDate"

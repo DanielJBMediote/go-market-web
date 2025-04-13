@@ -18,13 +18,11 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-col gap-4">
       <p className="text-xl text-foreground">Available products</p>
-      {/* Filtros com pesquisa */}
       <ProductFilter.Root>
         <ProductFilter.DescriptionField />
         <ProductFilter.CategoryField />
         <ProductFilter.PriceFields />
       </ProductFilter.Root>
-      {/* Lista de Produtos */}
       {isFetching ? (
         <Loading className="h-32" />
       ) : (
