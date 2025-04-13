@@ -16,32 +16,30 @@
 
 ---
 
-<p align="center"> Few lines describing your project.
+<p align="center"> This project is a web application for managing market activities. A simple system that i created for just increase my knowledge about some technologies.
     <br> 
 </p>
 
-## 📝 Table of Contents
+## 📝 Content
 
-- [📝 Table of Contents](#-table-of-contents)
+- [📝 Content](#-content)
 - [🧐 About ](#-about-)
-  - [Key Updates:](#key-updates)
 - [🏁 Getting Started ](#-getting-started-)
   - [Prerequisites](#prerequisites)
   - [Installing](#installing)
 - [🎈 Usage ](#-usage-)
-- [🚀 Deployment ](#-deployment-)
 - [⛏️ Built Using ](#️-built-using-)
 - [✍️ Authors ](#️-authors-)
 - [🎉 Acknowledgements ](#-acknowledgements-)
 
 ## 🧐 About <a name = "about"></a>
 
-Write about 1-2 paragraphs describing the purpose of your project.
+This Website was created using NextJS framework. Using language as Typescript. This project aims to enhance my skills in modern web development.
 
-### Key Updates:
+<!-- ### Key Updates:
 1. **Technologies**: Added `Next.js`, `TypeScript`, `Tailwind CSS`.
 2. **How to Run**: Follow the instructions below to run the project locally.
-<!-- 3. **Build and Deployment**: Added instructions for building and deploying the project. -->
+3. **Build and Deployment**: Added instructions for building and deploying the project. -->
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
@@ -52,7 +50,7 @@ These instructions will get you a copy of the project up and running on your loc
 What things you need to install the software and how to install them.
 
 ```bash
-npm install
+git clone https://github.com/DanielJBMediote/go-market-web.git
 ```
 
 ### Installing
@@ -60,6 +58,7 @@ npm install
 First initialize a Next project using TypeScript. Follow these steps to get your development environment running:
 
 ```bash
+npm install
 npm run dev
 ```
 
@@ -97,9 +96,9 @@ To use the system, follow these steps:
 1. Start the development server by running `npm run dev`.
 2. Open your browser and navigate to `http://localhost:3000` to view the application.
 
-## 🚀 Deployment <a name = "deployment"></a>
+<!-- ## 🚀 Deployment <a name = "deployment"></a>
 
-Add additional notes about how to deploy this on a live system.
+Add additional notes about how to deploy this on a live system. -->
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
