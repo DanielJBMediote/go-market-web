@@ -1,20 +1,22 @@
 "use client";
 
 import { API_URL } from "@/api";
+import { IProductApi } from "@/api/ProductApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { useAuthentication } from "@/contexts/auth-provider";
-import { CheckoutContextForm } from "@/contexts/checkout-provider";
+import { CheckoutContextForm, useCheckoutContext } from "@/contexts/checkout-provider";
 import { useClientCartContext } from "@/contexts/client-cart-provider";
 import { formatCurrency } from "@/utils/math-utils";
-import { ImageOff, Trash } from "lucide-react";
+import { ImageOff, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 export function CartSummary() {
-  const { items, removeAllOfItem } = useClientCartContext();
+  const { items, removeAllOfItem, addItem, removeItem } = useClientCartContext();
+  const { isSubmiting } = useCheckoutContext();
 
   const { setValue } = useFormContext<CheckoutContextForm>();
   const { userContext } = useAuthentication();
@@ -30,6 +32,14 @@ export function CartSummary() {
     removeAllOfItem(prodId);
   }
 
+  function handleIncreaseQuantity(product: IProductApi) {
+    addItem(product, 1);
+  }
+
+  function handleDecreaseQuantity(productId: number) {
+    removeItem(productId);
+  }
+
   useEffect(() => {
     if (!items.length) return;
 
@@ -43,45 +53,73 @@ export function CartSummary() {
 
   return (
     <div className="w-full space-y-4 p-6">
-      <h2 className="text-xl font-semibold border-b pb-2">Summary</h2>
+      <Text variant="subtitle">Summary</Text>
 
       <ul className="divide-y">
-        {items.map((item) => (
-          <li key={item.product.id} className="flex justify-between py-3">
-            <div className="flex gap-3">
-              {item.product.images.length > 0 ? (
-                <Image
-                  src={`${API_URL}/files/${item.product.images[0].file.uuid}`}
-                  alt={item.product.name}
-                  className="w-14 h-14 object-cover rounded"
-                  width={128}
-                  height={128}
-                />
-              ) : (
-                <div className="flex flex-col justify-center text-center items-center w-24 border p-2">
-                  <ImageOff />
-                  <Text variant="span">No image available</Text>
+        {items.length == 0 ? (
+          <div className="flex justify-center py-4 item gap-2">
+            <ShoppingCart />
+            <Text variant="span">Your cart is empty.</Text>
+          </div>
+        ) : (
+          items.map((item) => (
+            <li key={item.product.id} className="flex justify-between py-3">
+              <div className="flex gap-3">
+                {item.product.images.length > 0 ? (
+                  <Image
+                    src={`${API_URL}/files/${item.product.images[0].file.uuid}`}
+                    alt={item.product.name}
+                    className="w-14 h-14 object-cover rounded"
+                    width={128}
+                    height={128}
+                  />
+                ) : (
+                  <div className="flex flex-col justify-center text-center items-center w-24 border p-2">
+                    <ImageOff />
+                    <Text variant="span">No image available</Text>
+                  </div>
+                )}
+                <div className="flex flex-col text-foreground">
+                  <span className="font-semibold">{item.product.name}</span>
+                  <span className="text-sm">Quantity: {item.quantity}</span>
                 </div>
-              )}
-              <div className="flex flex-col text-foreground">
-                <span className="font-semibold">{item.product.name}</span>
-                <span className="text-xs">Qt.: {item.quantity}</span>
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="destructive"
-                  onClick={() => handleRemoveItem(item.product.id)}
-                >
-                  <Trash />
-                  Remove
-                </Button>
               </div>
-            </div>
-            <p className="text-right font-medium">
-              {formatCurrency(item.product.price * item.quantity)}
-            </p>
-          </li>
-        ))}
+              <div className="flex flex-col">
+                <p className="text-right font-medium">
+                  {formatCurrency(item.product.price * item.quantity)}
+                </p>
+                <div className="flex gap-2 scale-75 -mr-5">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    title="Remove"
+                    onClick={() => handleDecreaseQuantity(item.product.id)}
+                    disabled={item.quantity <= 1}
+                  >
+                    <Minus />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    title="Add"
+                    onClick={() => handleIncreaseQuantity(item.product)}
+                  >
+                    <Plus />
+                  </Button>
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="destructive"
+                    title="Remove"
+                    onClick={() => handleRemoveItem(item.product.id)}
+                  >
+                    <Trash2 />
+                  </Button>
+                </div>
+              </div>
+            </li>
+          ))
+        )}
       </ul>
 
       <div className="space-y-2 text-sm text-muted-foreground">
@@ -120,7 +158,13 @@ export function CartSummary() {
           Aplicar
         </Button>
       </div>
-      <Button className="w-full" size="lg" variant="success">
+      <Button
+        className="w-full"
+        size="lg"
+        variant="success"
+        isLoading={isSubmiting}
+        disabled={isSubmiting}
+      >
         Checkout
       </Button>
     </div>

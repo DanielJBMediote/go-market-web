@@ -9,7 +9,7 @@ export default function Home() {
     <div className="flex flex-col gap-4 justify-center">
       <HeroicInfo />
       <div className="flex gap-2 place-self-center">
-        <Link href="/client/dashboard">
+        <Link href="/dashboard">
           <Button>Start Shopping</Button>
         </Link>
         <Link href="/auth/sign-up">

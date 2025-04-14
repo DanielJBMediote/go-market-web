@@ -1,6 +1,6 @@
 import { IProductApi, ProductInstaceApi } from "@/api/ProductApi";
 import { ProductTypeSchema } from "@/app/manager/stores/[id]/products/components/product-modal-form";
-import { useModal } from "@/contexts/modal-provider";
+import { useModalContext } from "@/contexts/modal-provider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -11,7 +11,7 @@ interface CreateProductMutationProps {
 
 export function useProductMutation({ storeId, initialData }: CreateProductMutationProps) {
   const queryClient = useQueryClient();
-  const { closeModal } = useModal();
+  const { closeModal } = useModalContext();
 
   const query = useMutation({
     mutationFn: async (data: ProductTypeSchema) => {
@@ -57,4 +57,43 @@ export function useProductMutation({ storeId, initialData }: CreateProductMutati
   });
 
   return query;
+}
+
+export function useProductMakeFeaturedMutation() {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationFn: async (prodIds: number[]) => {
+      return await ProductInstaceApi.markSelecteAsFeatured(prodIds);
+    },
+    onSuccess: () => {
+      toast.success("Marked as Featured successfully!");
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+
+  return mutation;
+}
+
+export function useProductDeleteMutation({ id }: { id: number }) {
+  const queryClient = useQueryClient();
+  const { closeModal } = useModalContext();
+
+  const mutation = useMutation({
+    mutationFn: async () => {
+      return await ProductInstaceApi.delete(id);
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      closeModal();
+    },
+  });
+
+  return mutation;
 }

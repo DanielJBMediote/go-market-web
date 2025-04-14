@@ -39,9 +39,35 @@ api.interceptors.request.use(async (config) => {
   return config;
 });
 
+export interface IAxiosResponse<T> {
+  message: string;
+  status: number;
+  data: T;
+}
+
+export interface IAxiosErr {
+  code: string;
+  status: number;
+  message: string;
+  response?: {
+    data?: AxiosError;
+    status?: number;
+  };
+}
+
 // Interceptor de resposta
 api.interceptors.response.use(
-  (response) => response, // Retorna a resposta diretamente se não houver erro
+  (response) => {
+    // Se a resposta seguir o padrão da API
+    if (response.data?.message || response.data?.data) {
+      response.data = {
+        message: response.data.message,
+        data: response.data.data,
+      } as IAxiosResponse<unknown>;
+    }
+
+    return response;
+  }, // Retorna a resposta diretamente se não houver erro
   (error: AxiosError | undefined) => {
     if (!error) {
       localStorage.removeItem("@go-market-web:api-token");
@@ -57,16 +83,9 @@ api.interceptors.response.use(
         window.location.href = "/auth/sign-in"; // Redireciona para a página de login
       }
     }
+    if (error.response && error.response.data) {
+      return Promise.reject(error.response.data);
+    }
     return Promise.reject(error);
   }
 );
-
-export interface IAxiosErr {
-  code: string;
-  status: number;
-  message: string;
-  response?: {
-    data?: AxiosError;
-    status?: number;
-  };
-}

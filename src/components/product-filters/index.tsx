@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { useProductFilters } from "@/hooks/products/filters";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Search } from "lucide-react";
+import { Filter } from "lucide-react";
 import { PropsWithChildren } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -107,8 +107,8 @@ function Root({ children }: PropsWithChildren) {
         <div className="grid grid-cols-3 gap-2">{children}</div>
         <div className="flex gap-2">
           <Button type="submit">
-            <Search />
-            Search
+            <Filter />
+            Aplly Filter
           </Button>
           <Button type="button" variant="outline" onClick={handleResetFilters}>
             Reset

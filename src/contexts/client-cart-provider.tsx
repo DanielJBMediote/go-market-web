@@ -4,6 +4,7 @@ import { IProductApi } from "@/api/ProductApi";
 import { ClientCartActionTypes } from "@/reducers/client-cart/actions";
 import { CartItem, clientCartReducer } from "@/reducers/client-cart/reducer";
 import { createContext, PropsWithChildren, useContext, useEffect, useReducer } from "react";
+import { toast } from "sonner";
 
 export const SESSION_ITEMS_KEY = "@go-market:cart-items";
 
@@ -39,15 +40,19 @@ export function ClientCartProvider({ children }: PropsWithChildren) {
 
   function addItem(product: IProductApi, quantity: number) {
     dispatch({ type: ClientCartActionTypes.ADD, payload: { product, quantity } });
+    toast.info(`The product has been added to your shopping cart!`);
   }
-  function removeItem(itemId: number) {
-    dispatch({ type: ClientCartActionTypes.REMOVE, payload: itemId });
+  function removeItem(productId: number) {
+    dispatch({ type: ClientCartActionTypes.REMOVE, payload: productId });
+    toast.info(`The product has been removed from your shopping cart!`);
   }
-  function removeAllOfItem(itemId: number) {
-    dispatch({ type: ClientCartActionTypes.REMOVE_ALL_OF, payload: itemId });
+  function removeAllOfItem(productId: number) {
+    dispatch({ type: ClientCartActionTypes.REMOVE_ALL_OF, payload: productId });
+    toast.info(`The product has been removed from your shopping cart!`);
   }
   function clearCart() {
     dispatch({ type: ClientCartActionTypes.CLEAR, payload: null });
+    toast.info(`Your shopping cart is now empty!`);
   }
 
   const value: State & Actions = {

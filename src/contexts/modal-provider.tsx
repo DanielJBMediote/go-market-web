@@ -25,9 +25,14 @@ export const ModalProvider = ({ children }: PropsWithChildren) => {
     setModalContent(null);
   };
 
-  return (
-    <ModalContext.Provider value={{ isOpen, openModal, closeModal, modalContent }}>{children}</ModalContext.Provider>
-  );
+  const value = {
+    openModal,
+    closeModal,
+    isOpen,
+    modalContent,
+  };
+
+  return <ModalContext.Provider value={value}>{children}</ModalContext.Provider>;
 };
 
-export const useModal = () => useContext(ModalContext);
+export const useModalContext = () => useContext(ModalContext);

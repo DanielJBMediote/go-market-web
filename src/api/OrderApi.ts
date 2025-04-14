@@ -25,6 +25,9 @@ export enum OrderStatus {
 export interface IOrderItemApi extends IBaseObjectApi {
   order: IOrderApi;
   product: IProductApi;
+
+  quantity: number;
+  unitPrice: number;
 }
 
 export interface IOrderApi extends IBaseObjectApi {
@@ -40,10 +43,13 @@ export interface IOrderApi extends IBaseObjectApi {
 
   shippingAddress: string;
   paymentDate: Date;
-  deliveredDate: Date;
+  deliveryDate: Date;
 }
 
-export type OrderItemBody = Omit<IOrderItemApi, "id" | "createdAt" | "updatedAt" | "order">;
+export type OrderItemBody = Omit<
+  IOrderItemApi,
+  "id" | "createdAt" | "updatedAt" | "order" | "quantity" | "unitPrice"
+>;
 
 export interface OrderBody
   extends Omit<
@@ -54,7 +60,7 @@ export interface OrderBody
     | "status"
     | "uuid"
     | "client"
-    | "deliveredDate"
+    | "deliveryDate"
     | "paymentDate"
     | "items"
   > {
@@ -76,6 +82,12 @@ class OrderApi extends BaseApi<OrderBody> {
   }
   async update(id: number, body: OrderBody): Promise<AxiosResponse> {
     return await api.put<IOrderApi>(`/orders/${id}`, body);
+  }
+  async updateStatus(orderId: number) {
+    return await api.get(`/orders/${orderId}/update-status`);
+  }
+  async cancelOrder(orderId: number) {
+    return await api.get<IOrderApi>(`/orders/${orderId}/cancel`);
   }
   async delete(id: number): Promise<AxiosResponse> {
     return await api.delete(`/orders/${id}`);

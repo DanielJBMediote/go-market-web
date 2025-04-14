@@ -3,15 +3,17 @@
 import { Button } from "@/components/ui/button";
 import { Loading } from "@/components/ui/loading";
 import { useAuthentication } from "@/contexts/auth-provider";
-import { useModal } from "@/contexts/modal-provider";
+import { useModalContext } from "@/contexts/modal-provider";
 import { useStoreFilters } from "@/hooks/stores/filters";
 import { useStoresQuery } from "@/hooks/stores/queries";
+import { ChartLine, Plus } from "lucide-react";
+import Link from "next/link";
 import { useEffect } from "react";
 import { StoreCard } from "./components/card-detail";
 import { StoreFormModal } from "./components/store-form-modal";
 
 export default function StoresPage() {
-  const { openModal } = useModal();
+  const { openModal } = useModalContext();
   const { userContext } = useAuthentication();
 
   const { filters, setFilter } = useStoreFilters();
@@ -34,8 +36,19 @@ export default function StoresPage() {
   }
 
   return (
-    <>
-      <Button onClick={handleCreateStore}>Create store</Button>
+    <div className="flex flex-col gap-2">
+      <div className="flex gap-2">
+        <Button onClick={handleCreateStore}>
+          <Plus />
+          New Store
+        </Button>
+        <Link href="/manager/dashboard">
+          <Button>
+            <ChartLine />
+            See Overhall
+          </Button>
+        </Link>
+      </div>
       <div className="flex flex-col gap-2">
         <div className="flex justify-between items-center pb-2 mb-4">
           <p className="text-2xl font-bold text-foreground">My Stores</p>
@@ -51,6 +64,6 @@ export default function StoresPage() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }

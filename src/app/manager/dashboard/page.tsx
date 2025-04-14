@@ -3,6 +3,7 @@
 import { RevenueChartSellers } from "@/components/bar-chart-revenue";
 import { DashboardCard } from "@/components/dashboard-card";
 import { Loading } from "@/components/ui/loading";
+import { Text } from "@/components/ui/text";
 import { useDashboardMetrics } from "@/hooks/stores/queries";
 import { Tags, TrendingUp } from "lucide-react";
 import { useEffect } from "react";
@@ -30,7 +31,9 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-2xl extrabold text-primary">Dashboard - Metrics</p>
+      <Text variant="title" color="primary">
+        Dashboard - Metrics
+      </Text>
       <div className="grid grid-cols-4 gap-2">
         <DashboardCard
           title="Sales Performance"

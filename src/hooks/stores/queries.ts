@@ -15,7 +15,8 @@ export function useStoresQuery({ filters }: StoresQueryProps) {
     queryFn: async () => {
       const where = new Where<StoreKeys>();
       where.addFilters(filters);
-      const { data } = await StoreInstanceApi.fetchAll(where);
+      const response = await StoreInstanceApi.fetchAll(where);
+      const { data } = response.data;
       return data;
     },
     initialData: [],
@@ -30,7 +31,8 @@ export function useStoreQuery({ id }: { id: number }) {
   const query = useQuery<IStoreApi | null>({
     queryKey: ["stores", { id }],
     queryFn: async () => {
-      const { data } = await StoreInstanceApi.fetchOneById(id);
+      const response = await StoreInstanceApi.fetchOneById(id);
+      const { data } = response.data;
       return data;
     },
     enabled: !!id,
@@ -46,7 +48,8 @@ export function useDashboardMetricsByStoreId({ id }: { id: number }) {
   const query = useQuery<StoreDashboardMetrics | null>({
     queryKey: ["store-dashboard-metrics", { id }],
     queryFn: async () => {
-      const { data } = await StoreInstanceApi.getDashboardMetricsByStoreId(id);
+      const response = await StoreInstanceApi.getDashboardMetricsByStoreId(id);
+      const { data } = response.data;
       return data;
     },
     enabled: !!id,
@@ -62,7 +65,8 @@ export function useDashboardMetrics() {
   const query = useQuery<StoreDashboardMetrics | null>({
     queryKey: ["store-dashboard-metrics"],
     queryFn: async () => {
-      const { data } = await StoreInstanceApi.getDashboardMetrics();
+      const response = await StoreInstanceApi.getDashboardMetrics();
+      const { data } = response.data;
       return data;
     },
     initialData: null,

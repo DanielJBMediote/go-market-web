@@ -1,12 +1,14 @@
 "use client";
 
-import { IStoreApi, StoreInstanceApi } from "@/api/StoreApi";
+import { IStoreApi } from "@/api/StoreApi";
+import { CancelConfirmationDialog } from "@/components/cancel-confirmation-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useModal } from "@/contexts/modal-provider";
+import { useModalContext } from "@/contexts/modal-provider";
+import { useStoreDeleteMutation } from "@/hooks/stores/mutations";
 import { useStoreRevenue } from "@/hooks/stores/store-revenue-hook";
 import { formatCurrency } from "@/utils/math-utils";
-import { ChartNoAxesCombined, ExternalLink, Pencil, Store } from "lucide-react";
+import { ChartNoAxesCombined, ExternalLink, Pencil, Store, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { StoreFormModal } from "./store-form-modal";
@@ -19,20 +21,33 @@ interface StoreCardProp {
 
 export function StoreCard({ store }: StoreCardProp) {
   const { avarageSalles, totalOrdered, totalSalles } = useStoreRevenue(store.products || []);
-  const { openModal } = useModal();
+  const { openModal } = useModalContext();
 
   async function handleEditStore() {
-    const { data } = await StoreInstanceApi.fetchOneById(store.id);
-    openModal(<StoreFormModal initialData={data} />);
+    openModal(<StoreFormModal initialData={store} />);
   }
 
-  // const productsLength = store.products.length;
-  const productsLength = 0;
+  const { mutateAsync, isPending } = useStoreDeleteMutation({ id: store.id });
+
+  async function handleDeleteStore() {
+    await mutateAsync();
+  }
+
+  function handleConfirmDeleteStore() {
+    openModal(
+      <CancelConfirmationDialog
+        title="Are your sure to delete store?"
+        description={`Store: ${store.name}. All products/orders and others relations with this store will be deleted too.`}
+        onConfirm={handleDeleteStore}
+        isPending={isPending}
+      />
+    );
+  }
 
   return (
     <Card className="relative p-0">
       {store.logo ? (
-        <div className="w-full h-56 overflow-hidden rounded-lg shadow-lg">
+        <div className="w-full h-64 overflow-hidden rounded-lg shadow-lg">
           <Image
             src={`${API_URL}/files/${store.logo.uuid}`}
             alt={"Logo image of " + store.name + " store."}
@@ -42,7 +57,7 @@ export function StoreCard({ store }: StoreCardProp) {
           />
         </div>
       ) : (
-        <div className="h-56 w-full flex items-center justify-center gap-2">
+        <div className="h-64 w-full flex items-center justify-center gap-2">
           <Store />
           No Image.
         </div>
@@ -56,7 +71,7 @@ export function StoreCard({ store }: StoreCardProp) {
           <p className="text-sm text-foreground">{store.description}</p>
         </CardDescription>
       </CardHeader>
-      <CardContent className="pb-4">
+      <CardContent className="pb-4 flex flex-col gap-2">
         <div className="grid grid-cols-2 gap-2">
           <div className="flex gap-2 items-center">
             <p className="text-md font-semibold">Avarage Salles:</p>
@@ -70,10 +85,10 @@ export function StoreCard({ store }: StoreCardProp) {
             <p className="text-md font-semibold">Total Salles:</p>
             <p className="font-light text-sm">{formatCurrency(totalSalles)}</p>
           </div>
-          <div className="flex gap-2 items-center">
+          {/* <div className="flex gap-2 items-center">
             <p className="text-md font-semibold">Products:</p>
             <p className="font-light text-sm">{productsLength}</p>
-          </div>
+          </div> */}
           <div className="flex gap-2 items-center">
             <p className="text-md font-semibold">Status:</p>
             {store.isActive ? (
@@ -97,7 +112,7 @@ export function StoreCard({ store }: StoreCardProp) {
             <p className="font-light text-sm">{store.owner.name}</p>
           </div>
         </div>
-        <div className="flex gap-2 items-center absolute top-[40%] right-2">
+        <div className="flex gap-2 items-center">
           <Button variant="outline" onClick={handleEditStore}>
             Edit
             <Pencil />
@@ -114,6 +129,10 @@ export function StoreCard({ store }: StoreCardProp) {
               <ChartNoAxesCombined />
             </Button>
           </Link>
+          <Button variant="destructive" onClick={handleConfirmDeleteStore}>
+            Delete
+            <Trash2 />
+          </Button>
         </div>
       </CardContent>
     </Card>

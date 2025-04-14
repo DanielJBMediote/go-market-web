@@ -50,6 +50,7 @@ interface DataTableProps<TData> {
   data: TData[];
   columns: ColumnDef<TData>[];
   pagination?: TablePaginationOptions;
+  onRowSelectionChange?: (selected: TData[]) => void;
 }
 
 interface ClientSideTableProps<TData> {
@@ -194,6 +195,7 @@ function TablePagination<TData>({
 export function DataTable<TData>({
   columns,
   data,
+  onRowSelectionChange,
   pagination = {
     defaultItemsPerPage: 20,
   },
@@ -213,7 +215,15 @@ export function DataTable<TData>({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
+    // onRowSelectionChange: setRowSelection,
+    onRowSelectionChange: (updater) => {
+      const newRowSelection = typeof updater === "function" ? updater(rowSelection) : updater;
+      setRowSelection(newRowSelection);
+      const selectedRows = Object.keys(newRowSelection).map(
+        (key) => table.getRowModel().rowsById[key].original
+      );
+      onRowSelectionChange?.(selectedRows);
+    },
     pageCount: pagination.pageSize,
     state: {
       sorting,

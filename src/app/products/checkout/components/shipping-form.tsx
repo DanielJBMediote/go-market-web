@@ -11,9 +11,7 @@ export function ShippingForm() {
 
   return (
     <div className="flex flex-col gap-4 rounded-sm shadow p-6">
-      <Text variant="subtitle" color="primary">
-        Shipping Form
-      </Text>
+      <Text variant="subtitle">Shipping Form</Text>
       <div className="grid grid-cols-4 gap-4">
         <FormItem className="col-span-2">
           <FormLabel htmlFor="postalCode">Post Code</FormLabel>

@@ -119,6 +119,10 @@ class ProductApi extends BaseApi<ProductBody> {
   async fetchComments(id: number) {
     return await api.get<IProductCommentApi[]>(`/products/${id}/comment`);
   }
+
+  async markSelecteAsFeatured(prodIds: number[]) {
+    return await api.put(`/products/mark-as-featured`, prodIds);
+  }
 }
 
 export const ProductInstaceApi = new ProductApi();

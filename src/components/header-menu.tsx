@@ -1,6 +1,5 @@
 import { Roles } from "@/api/UserApi";
 import { useAuthentication } from "@/contexts/auth-provider";
-import { getUrlPath } from "@/utils/path-utils";
 import {
   CreditCard,
   Heart,
@@ -60,17 +59,21 @@ export function HeaderMenu() {
             )}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="cursor-pointer">
-            <Package2 />
-            Orders
-          </DropdownMenuItem>
           {userContext && userContext.role == Roles.MANAGER ? (
-            <Link href={getUrlPath(userContext.role).concat("/stores")}>
-              <DropdownMenuItem className="cursor-pointer">
-                <Store />
-                My stores
-              </DropdownMenuItem>
-            </Link>
+            <>
+              <Link href="/manager/orders">
+                <DropdownMenuItem className="cursor-pointer">
+                  <Package2 />
+                  Orders
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/manager/stores">
+                <DropdownMenuItem className="cursor-pointer">
+                  <Store />
+                  My stores
+                </DropdownMenuItem>
+              </Link>
+            </>
           ) : (
             <>
               <DropdownMenuItem className="cursor-pointer">

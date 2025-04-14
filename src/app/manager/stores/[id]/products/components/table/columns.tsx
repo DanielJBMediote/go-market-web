@@ -3,13 +3,11 @@ import { ICategoryApi } from "@/api/CategoryApi";
 import { IProductApi } from "@/api/ProductApi";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { useModal } from "@/contexts/modal-provider";
 import { formatCurrency } from "@/utils/math-utils";
-import { ColumnDef, Row } from "@tanstack/react-table";
-import { ArrowDown, ArrowUp, ArrowUpDown, ImageOff, Pencil, Trash2 } from "lucide-react";
+import { ColumnDef } from "@tanstack/react-table";
+import { ArrowDown, ArrowUp, ArrowUpDown, ImageOff } from "lucide-react";
 import Image from "next/image";
-import { DeleteConfirmation } from "./delete-confirmation";
-import { ProductFormModal } from "./product-modal-form";
+import { TableProductActions } from "./actions";
 
 export const columns: ColumnDef<IProductApi>[] = [
   {
@@ -183,29 +181,6 @@ export const columns: ColumnDef<IProductApi>[] = [
   {
     accessorKey: "actions",
     header: "Actions",
-    cell: ({ row }) => <Actions row={row} />,
+    cell: ({ row }) => <TableProductActions row={row} />,
   },
 ];
-
-function Actions({ row }: { row: Row<IProductApi> }) {
-  const { openModal } = useModal();
-
-  function handleEditProduct() {
-    openModal(<ProductFormModal initialData={row.original} />);
-  }
-
-  function handleOpenComfirmDeleteModal() {
-    openModal(<DeleteConfirmation product={row.original} />);
-  }
-
-  return (
-    <div className="flex">
-      <Button title="Edit" size="icon" variant="ghost" onClick={handleEditProduct}>
-        <Pencil />
-      </Button>
-      <Button size="icon" title="Delete" variant="ghost" onClick={handleOpenComfirmDeleteModal}>
-        <Trash2 className="text-rose-400" />
-      </Button>
-    </div>
-  );
-}

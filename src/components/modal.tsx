@@ -1,10 +1,10 @@
 "use client";
 
 import { Dialog } from "@/components/ui/dialog";
-import { useModal } from "@/contexts/modal-provider";
+import { useModalContext } from "@/contexts/modal-provider";
 
 export function GlobalModal() {
-  const { isOpen, closeModal, modalContent } = useModal();
+  const { isOpen, closeModal, modalContent } = useModalContext();
 
   return (
     <Dialog open={isOpen} onOpenChange={closeModal}>

@@ -7,7 +7,7 @@ import { ShippingForm } from "./components/shipping-form";
 export default function Checkout() {
   return (
     <div className="space-y-4">
-      <Text size="2xl" variant="title">
+      <Text variant="title" color="primary">
         Checkout
       </Text>
       <CheckoutProvider>

@@ -1,17 +1,10 @@
 // import { OrderStatus } from "@/api/OrderApi";
+import { OrderStatus } from "@/api/OrderApi";
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
 
-export type OrderStatusKey =
-  | "PENDING"
-  | "COMPLETED"
-  | "CANCELLED"
-  | "PROCESSING"
-  | "SHIPPED"
-  | "DELIVERED"
-  | "REFUNDED"
-  | "FAILED";
+export type OrderStatusKey = keyof typeof OrderStatus;
 
 const statusVariant = cva("rounded-full h-2 w-2", {
   variants: {

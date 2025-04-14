@@ -33,9 +33,7 @@ export function PaymentMethodForm() {
 
   return (
     <div className="p-6 rounded-sm shadow flex flex-col gap-4">
-      <Text variant="subtitle" color="primary">
-        Payment Method
-      </Text>
+      <Text variant="subtitle">Payment Method</Text>
       <FormField
         name="paymentMethod"
         control={control}

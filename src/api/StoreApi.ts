@@ -1,4 +1,4 @@
-import { api } from ".";
+import { api, IAxiosResponse } from ".";
 import { BaseApi, IBaseObjectApi } from "./Api";
 import { IFileApi } from "./FileApi";
 import { IProductApi } from "./ProductApi";
@@ -45,35 +45,39 @@ class StoreApi extends BaseApi<StoreBody> {
     const formData = new FormData();
     formData.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
     if (data.file) formData.append("file", data.file);
-    return await api.post<IStoreApi>("/stores", formData, {
+    return await api.post<IAxiosResponse<IStoreApi>>("/stores", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   }
+
   async fetchAll(where = new Where()) {
-    return await api.get<IStoreApi[]>(`/stores`, { params: { where: where.build() } });
+    return await api.get<IAxiosResponse<IStoreApi[]>>(`/stores`, {
+      params: { where: where.build() },
+    });
   }
+
   async fetchOneById(id: number) {
-    return await api.get<IStoreApi>(`/stores/${id}`);
+    return await api.get<IAxiosResponse<IStoreApi>>(`/stores/${id}`);
   }
   async update(id: number, data: StoreBody) {
     const formData = new FormData();
     formData.append("data", new Blob([JSON.stringify(data)], { type: "application/json" }));
     if (data.file) formData.append("file", data.file);
-    return await api.put<IStoreApi>(`/stores/${id}`, formData, {
+    return await api.put<IAxiosResponse<IStoreApi>>(`/stores/${id}`, formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
   }
 
   async getDashboardMetricsByStoreId(id: number) {
-    return await api.get<StoreDashboardMetrics>(`/stores/${id}/dashboard-metrics`);
+    return await api.get<IAxiosResponse<StoreDashboardMetrics>>(`/stores/${id}/dashboard-metrics`);
   }
 
   async getDashboardMetrics() {
-    return await api.get<StoreDashboardMetrics>(`/stores/dashboard-metrics`);
+    return await api.get<IAxiosResponse<StoreDashboardMetrics>>(`/stores/dashboard-metrics`);
   }
 
   async delete(id: number) {
-    return await api.delete(`/stores/${id}`);
+    return await api.delete<IAxiosResponse<string>>(`/stores/${id}`);
   }
 }
 

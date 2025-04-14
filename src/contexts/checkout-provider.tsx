@@ -1,12 +1,13 @@
 "use client";
 
-import { PaymentMethod } from "@/api/OrderApi";
+import { IOrderApi, PaymentMethod } from "@/api/OrderApi";
 import { IProductApi } from "@/api/ProductApi";
 import { Form } from "@/components/ui/form";
 import { useOrderMutation } from "@/hooks/orders/mutations";
 import { notifyFormErrors } from "@/utils/notifyFormFieldErros";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createContext, PropsWithChildren, useContext } from "react";
+import { useRouter } from "next/navigation";
+import { createContext, PropsWithChildren, useContext, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -41,12 +42,28 @@ export type CheckoutContextForm = z.infer<typeof checkoutSchema>;
 interface CheckoutContextProps {
   onSubmit: (data: CheckoutContextForm) => Promise<void>;
   isSubmiting: boolean;
+  orderDetails: IOrderApi | null;
 }
 
 const CheckoutContext = createContext({} as CheckoutContextProps);
 
 export function CheckoutProvider({ children }: PropsWithChildren) {
+  const [orderDetails, setOrderDetails] = useState<IOrderApi | null>(() => {
+    const storedOrderDetails = sessionStorage.getItem("orderDetails");
+    return storedOrderDetails ? JSON.parse(storedOrderDetails) : null;
+  });
+
+  const updateOrderDetails = (details: IOrderApi | null) => {
+    setOrderDetails(details);
+    if (details) {
+      sessionStorage.setItem("orderDetails", JSON.stringify(details));
+    } else {
+      sessionStorage.removeItem("orderDetails");
+    }
+  };
+
   const { userContext } = useAuthentication();
+  const router = useRouter();
 
   const methods = useForm({
     resolver: zodResolver(checkoutSchema),
@@ -71,7 +88,9 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
       taxes: data.taxes,
     };
 
-    await mutateAsync(body);
+    const response = await mutateAsync(body);
+    updateOrderDetails(response);
+    router.push("/products/checkout-finished");
   }
 
   function formatShippingAddress({ address }: Pick<CheckoutContextForm, "address">): string {
@@ -84,7 +103,7 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
     notifyFormErrors(errors);
   };
 
-  const value: CheckoutContextProps = { onSubmit, isSubmiting: isPending };
+  const value: CheckoutContextProps = { onSubmit, isSubmiting: isPending, orderDetails };
 
   return (
     <CheckoutContext.Provider value={value}>
@@ -97,6 +116,6 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
 
 export function useCheckoutContext() {
   const context = useContext(CheckoutContext);
-  if (!context) throw new Error("useCheckoutContext must be used inside CheckoutProvider");
+  if (!!context) throw new Error("useCheckoutContext must be used inside CheckoutProvider");
   return context;
 }

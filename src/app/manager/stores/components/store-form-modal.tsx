@@ -13,14 +13,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useModal } from "@/contexts/modal-provider";
+import { useModalContext } from "@/contexts/modal-provider";
+import { useStoreMutation } from "@/hooks/stores/mutations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Store, X } from "lucide-react";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import * as z from "zod";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -34,15 +33,14 @@ const createStoreSchema = z.object({
   file: z.custom<File>().optional(),
 });
 
-type CreateStoreType = z.infer<typeof createStoreSchema>;
+export type CreateStoreType = z.infer<typeof createStoreSchema>;
 
 interface StoreFormModalProps {
   initialData?: IStoreApi;
 }
 
 export function StoreFormModal({ initialData }: StoreFormModalProps) {
-  const queryClient = useQueryClient();
-  const { closeModal } = useModal();
+  const { closeModal } = useModalContext();
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const methods = useForm({
@@ -53,31 +51,7 @@ export function StoreFormModal({ initialData }: StoreFormModalProps) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [existingLogo, setExistingLogo] = useState<IFileApi | null>(methods.getValues("logo"));
 
-  const { mutateAsync } = useMutation({
-    mutationFn: async (data: CreateStoreType) => {
-      const { name, slug, description, isActive, file } = data;
-      if (initialData) {
-        const id = initialData.id;
-        return await StoreInstanceApi.update(id, { name, slug, description, isActive, file });
-      } else {
-        return await StoreInstanceApi.create({ name, slug, description, isActive, file });
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["stores"] });
-      toast.success(`Store ${initialData ? "updated" : "created"} successfully!`);
-      if (initialData) {
-        closeModal();
-      } else {
-        methods.reset();
-      }
-    },
-    onError: (error) => {
-      // const err = error as IAxiosErr;
-      // toast.error(err.response?.data?.message);
-      toast.error(error.message);
-    },
-  });
+  const { mutateAsync } = useStoreMutation({ initialData });
 
   async function handleCreateStore(data: CreateStoreType) {
     await mutateAsync(data);
@@ -133,7 +107,9 @@ export function StoreFormModal({ initialData }: StoreFormModalProps) {
       where.addCondition("id", initialData.id, "NOT");
     }
 
-    const { data } = await StoreInstanceApi.fetchAll(where);
+    const response = await StoreInstanceApi.fetchAll(where);
+    const { data } = response.data;
+
     if (data.length > 0) {
       methods.setError("name", { message: "This store name already exists." });
     }

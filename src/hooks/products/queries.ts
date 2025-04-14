@@ -1,4 +1,4 @@
-import { ProductInstaceApi } from "@/api/ProductApi";
+import { IProductApi, ProductInstaceApi } from "@/api/ProductApi";
 import { Where } from "@/api/Where";
 import { useQuery } from "@tanstack/react-query";
 import { Filter } from "../handle-filter";
@@ -13,10 +13,9 @@ interface ProductQueryProps {
 }
 
 export function useProductByStoreIdQuery({ storeId, filters }: ProductQueryProps) {
-  const query = useQuery({
+  const query = useQuery<IProductApi[]>({
     queryKey: [QUERY_KEY, { storeId, filters }],
     queryFn: async () => {
-      if (!storeId) return null;
       const where = new Where<ProductKeys>();
       where.addFilters(filters);
       where.addCondition("store.id", storeId, "EQUALS");
