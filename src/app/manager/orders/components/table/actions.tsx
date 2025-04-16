@@ -1,4 +1,4 @@
-import { IOrderApi } from "@/api/OrderApi";
+import { IOrderApi, OrderStatusKey } from "@/api/OrderApi";
 import { CancelConfirmationDialog } from "@/components/cancel-confirmation-dialog";
 import { Button } from "@/components/ui/button";
 import { useModalContext } from "@/contexts/modal-provider";
@@ -7,7 +7,6 @@ import { Row } from "@tanstack/react-table";
 import { Info, X } from "lucide-react";
 import { OrderInfoDetailModal } from "../order-detail-modal";
 import { ButtonOrderStatusAction } from "./actions-btn-order-status";
-import { OrderStatusKey } from "./order-status-flag";
 
 export function TableOrderActions({ row }: { row: Row<IOrderApi> }) {
   const { openModal } = useModalContext();

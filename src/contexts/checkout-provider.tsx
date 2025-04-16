@@ -7,7 +7,7 @@ import { useOrderMutation } from "@/hooks/orders/mutations";
 import { notifyFormErrors } from "@/utils/notifyFormFieldErros";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { createContext, PropsWithChildren, useContext, useState } from "react";
+import { createContext, PropsWithChildren, useContext, useEffect, useState } from "react";
 import { FieldErrors, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -48,19 +48,21 @@ interface CheckoutContextProps {
 const CheckoutContext = createContext({} as CheckoutContextProps);
 
 export function CheckoutProvider({ children }: PropsWithChildren) {
-  const [orderDetails, setOrderDetails] = useState<IOrderApi | null>(() => {
-    const storedOrderDetails = sessionStorage.getItem("orderDetails");
-    return storedOrderDetails ? JSON.parse(storedOrderDetails) : null;
-  });
+  const [orderDetails, setOrderDetails] = useState<IOrderApi | null>(null);
 
   const updateOrderDetails = (details: IOrderApi | null) => {
     setOrderDetails(details);
     if (details) {
-      sessionStorage.setItem("orderDetails", JSON.stringify(details));
+      sessionStorage.setItem("@go-market-web:order-details", JSON.stringify(details));
     } else {
-      sessionStorage.removeItem("orderDetails");
+      sessionStorage.removeItem("@go-market-web:order-details");
     }
   };
+
+  useEffect(() => {
+    const storedOrderDetails = sessionStorage.getItem("@go-market-web:order-details");
+    setOrderDetails(storedOrderDetails ? JSON.parse(storedOrderDetails) : null);
+  }, []);
 
   const { userContext } = useAuthentication();
   const router = useRouter();
@@ -88,8 +90,8 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
       taxes: data.taxes,
     };
 
-    const response = await mutateAsync(body);
-    updateOrderDetails(response);
+    const { data: orderDetail } = await mutateAsync(body);
+    updateOrderDetails(orderDetail);
     router.push("/products/checkout-finished");
   }
 
@@ -116,6 +118,6 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
 
 export function useCheckoutContext() {
   const context = useContext(CheckoutContext);
-  if (!!context) throw new Error("useCheckoutContext must be used inside CheckoutProvider");
+  if (!context) throw new Error("useCheckoutContext must be used inside CheckoutProvider");
   return context;
 }

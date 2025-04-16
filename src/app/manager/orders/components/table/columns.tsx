@@ -1,11 +1,11 @@
-import { IOrderApi, IOrderItemApi } from "@/api/OrderApi";
+import { IOrderApi, IOrderItemApi, OrderStatusKey } from "@/api/OrderApi";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Text } from "@/components/ui/text";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown } from "lucide-react";
 import { TableOrderActions } from "./actions";
-import { OrderStatusFlag, OrderStatusKey } from "./order-status-flag";
+import { OrderStatusFlag } from "./order-status-flag";
 import { PaymentMethodFlag } from "./payment-method-flag";
 
 export const orderColumns: ColumnDef<IOrderApi>[] = [

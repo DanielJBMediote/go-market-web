@@ -5,7 +5,6 @@ import { IProductApi } from "@/api/ProductApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
-import { useAuthentication } from "@/contexts/auth-provider";
 import { CheckoutContextForm, useCheckoutContext } from "@/contexts/checkout-provider";
 import { useClientCartContext } from "@/contexts/client-cart-provider";
 import { formatCurrency } from "@/utils/math-utils";
@@ -19,7 +18,7 @@ export function CartSummary() {
   const { isSubmiting } = useCheckoutContext();
 
   const { setValue } = useFormContext<CheckoutContextForm>();
-  const { userContext } = useAuthentication();
+  // const { userContext } = useAuthentication();
 
   const [discount, setDiscount] = useState(0);
   const [coupon, setCoupon] = useState("");
@@ -39,6 +38,8 @@ export function CartSummary() {
   function handleDecreaseQuantity(productId: number) {
     removeItem(productId);
   }
+
+  function handleApplyCupon() {}
 
   useEffect(() => {
     if (!items.length) return;

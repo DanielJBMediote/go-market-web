@@ -1,6 +1,6 @@
 import { IOrderApi } from "@/api/OrderApi";
 import { Button } from "@/components/ui/button";
-import { DialogContent, DialogTitle } from "@/components/ui/dialog";
+import { DialogContent, DialogFooter, DialogTitle } from "@/components/ui/dialog";
 import {
   Table,
   TableBody,
@@ -11,15 +11,23 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Text } from "@/components/ui/text";
+import { useOrderUpdateStatusMutation } from "@/hooks/orders/mutations";
 import { formatCurrency } from "@/utils/math-utils";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
+import { ButtonOrderStatusAction } from "../table/actions-btn-order-status";
 
 interface OrderDetailModalProps {
   initialData: IOrderApi;
 }
 
 export function OrderInfoDetailModal({ initialData }: OrderDetailModalProps) {
+  const { mutateAsync } = useOrderUpdateStatusMutation({ id: initialData.id });
+
+  async function handleUpdateOrderStatus() {
+    await mutateAsync();
+  }
+
   return (
     <DialogContent className="min-w-2xl">
       <DialogTitle>Order Detail</DialogTitle>
@@ -140,6 +148,11 @@ export function OrderInfoDetailModal({ initialData }: OrderDetailModalProps) {
           </TableFooter>
         </Table>
       </div>
+      <DialogFooter>
+        <div className="flex gap-2">
+          <ButtonOrderStatusAction status={initialData.status} onClick={handleUpdateOrderStatus} />
+        </div>
+      </DialogFooter>
     </DialogContent>
   );
 }

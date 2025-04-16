@@ -23,11 +23,9 @@ export function useStoreMutation({ initialData }: StoreMutationProps) {
       }
     },
     onSuccess: (response) => {
-      toast.success(response.data.message);
+      toast.success(response.message);
       queryClient.invalidateQueries({ queryKey: ["stores"] });
-      if (initialData) {
-        closeModal();
-      }
+      if (initialData) closeModal();
     },
     onError: (error) => {
       toast.error(error.message);
@@ -46,7 +44,7 @@ export function useStoreDeleteMutation({ id }: { id: number }) {
       return await StoreInstanceApi.delete(id);
     },
     onSuccess: (response) => {
-      toast.success(response.data.message);
+      toast.success(response.message);
       queryClient.invalidateQueries({ queryKey: ["stores"] });
       closeModal();
     },

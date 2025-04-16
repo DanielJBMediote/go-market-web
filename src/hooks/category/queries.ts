@@ -9,6 +9,8 @@ export function useCategoryQuery() {
     queryKey: [QUERY_KEY],
     queryFn: async () => {
       const { data } = await CategoryInstanceApi.fetchAll();
+      console.log("Bolinho:", data);
+
       return data;
     },
     initialData: [],

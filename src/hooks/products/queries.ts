@@ -22,9 +22,6 @@ export function useProductByStoreIdQuery({ storeId, filters }: ProductQueryProps
       const { data } = await ProductInstaceApi.fetchAll(where);
       return data;
     },
-    throwOnError: (error) => {
-      throw new Error("Error fetching store: ", error);
-    },
     enabled: !!storeId,
     initialData: [],
     placeholderData: [],
@@ -43,9 +40,6 @@ export function useProductsQuery({ filters }: Pick<ProductQueryProps, "filters">
       const { data } = await ProductInstaceApi.fetchAll(where);
       return data;
     },
-    throwOnError: (error) => {
-      throw new Error("Error fetching store: ", error);
-    },
     initialData: [],
     placeholderData: [],
     ...queryConfigs,
@@ -63,9 +57,6 @@ export function useProductsFeaturedQuery({ filters }: Pick<ProductQueryProps, "f
       const { data } = await ProductInstaceApi.fetchAllFeatrued(where);
       return data;
     },
-    throwOnError: (error) => {
-      throw new Error("Error fetching store: ", error);
-    },
     initialData: [],
     placeholderData: [],
     ...queryConfigs,
@@ -80,9 +71,6 @@ export function useProductQuery({ id }: { id?: number }) {
     queryFn: async () => {
       const { data } = await ProductInstaceApi.fetchOneById(id!);
       return data;
-    },
-    throwOnError: (error) => {
-      throw new Error("Error fetching store: ", error);
     },
     enabled: !!id,
     initialData: null,

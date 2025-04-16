@@ -108,7 +108,7 @@ export function StoreFormModal({ initialData }: StoreFormModalProps) {
     }
 
     const response = await StoreInstanceApi.fetchAll(where);
-    const { data } = response.data;
+    const { data: data } = response.data;
 
     if (data.length > 0) {
       methods.setError("name", { message: "This store name already exists." });

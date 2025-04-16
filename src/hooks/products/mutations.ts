@@ -44,12 +44,10 @@ export function useProductMutation({ storeId, initialData }: CreateProductMutati
         });
       }
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
       queryClient.invalidateQueries({ queryKey: ["products", { storeId }] });
-      toast.success(`Product ${initialData ? "updated" : "created"} successfully!`);
-      if (initialData) {
-        closeModal();
-      }
+      toast.success(response.message);
+      if (initialData) closeModal();
     },
     onError: (error) => {
       toast.error(error.message);
@@ -66,8 +64,8 @@ export function useProductMakeFeaturedMutation() {
     mutationFn: async (prodIds: number[]) => {
       return await ProductInstaceApi.markSelecteAsFeatured(prodIds);
     },
-    onSuccess: () => {
-      toast.success("Marked as Featured successfully!");
+    onSuccess: (response) => {
+      toast.success(response.message);
       queryClient.invalidateQueries({ queryKey: ["products"] });
     },
     onError: (error) => {
@@ -89,7 +87,8 @@ export function useProductDeleteMutation({ id }: { id: number }) {
     onError: (error) => {
       toast.error(error.message);
     },
-    onSuccess: () => {
+    onSuccess: (response) => {
+      toast.success(response.message);
       queryClient.invalidateQueries({ queryKey: ["products"] });
       closeModal();
     },

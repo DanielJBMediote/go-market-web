@@ -1,5 +1,4 @@
-import { AxiosResponse } from "axios";
-import { api } from ".";
+import { api, CustomResponse } from ".";
 import { BaseApi, IBaseObjectApi } from "./Api";
 import { IProductApi } from "./ProductApi";
 import { IUserApi } from "./UserApi";
@@ -22,6 +21,8 @@ export enum OrderStatus {
   COMPLETED = "Completed", // Pedido concluído
 }
 
+export type OrderStatusKey = keyof typeof OrderStatus;
+
 export interface IOrderItemApi extends IBaseObjectApi {
   order: IOrderApi;
   product: IProductApi;
@@ -38,7 +39,7 @@ export interface IOrderApi extends IBaseObjectApi {
   taxes: number;
   discount: number;
   totalAmount: number;
-  status: OrderStatus;
+  status: OrderStatusKey;
   paymentMethod: PaymentMethod;
 
   shippingAddress: string;
@@ -70,27 +71,43 @@ export interface OrderBody
   items: OrderItemBody[];
 }
 
-class OrderApi extends BaseApi<OrderBody> {
-  async create(body: OrderBody): Promise<AxiosResponse> {
-    return await api.post<IOrderApi>(`/orders`, body);
+class OrderApi extends BaseApi<OrderBody, IOrderApi> {
+  async create(body: OrderBody) {
+    const response = await api.post<CustomResponse<IOrderApi>>(`/orders`, body);
+    const { data } = response;
+    return data;
   }
-  async fetchAll(where = new Where()): Promise<AxiosResponse> {
-    return await api.get<IOrderApi[]>(`/orders`, { params: { where: where.build() } });
+  async fetchAll(where = new Where()) {
+    const response = await api.get<CustomResponse<IOrderApi[]>>(`/orders`, {
+      params: { where: where.build() },
+    });
+    const { data } = response;
+    return data;
   }
-  async fetchOneById(id: number): Promise<AxiosResponse> {
-    return await api.get<IOrderApi>(`/orders/${id}`);
+  async fetchOneById(id: number) {
+    const response = await api.get<CustomResponse<IOrderApi>>(`/orders/${id}`);
+    const { data } = response;
+    return data;
   }
-  async update(id: number, body: OrderBody): Promise<AxiosResponse> {
-    return await api.put<IOrderApi>(`/orders/${id}`, body);
+  async update(id: number, body: OrderBody) {
+    const response = await api.put<CustomResponse<IOrderApi>>(`/orders/${id}`, body);
+    const { data } = response;
+    return data;
   }
   async updateStatus(orderId: number) {
-    return await api.get(`/orders/${orderId}/update-status`);
+    const response = await api.get<CustomResponse<null>>(`/orders/${orderId}/update-status`);
+    const { data } = response;
+    return data;
   }
   async cancelOrder(orderId: number) {
-    return await api.get<IOrderApi>(`/orders/${orderId}/cancel`);
+    const response = await api.get<CustomResponse<null>>(`/orders/${orderId}/cancel`);
+    const { data } = response;
+    return data;
   }
-  async delete(id: number): Promise<AxiosResponse> {
-    return await api.delete(`/orders/${id}`);
+  async delete(id: number) {
+    const response = await api.delete<CustomResponse<null>>(`/orders/${id}`);
+    const { data } = response;
+    return data;
   }
 }
 

@@ -1,4 +1,4 @@
-import { api } from ".";
+import { api, CustomResponse } from ".";
 import { BaseApi, IBaseObjectApi } from "./Api";
 
 export enum Roles {
@@ -17,35 +17,46 @@ export interface IUserApi extends IBaseObjectApi {
 export type IUserDataCreate = Omit<IUserApi, "id" | "createdAt" | "updatedAt">;
 export type IUserDataRead = Omit<IUserApi, "password">;
 
-class UserApi extends BaseApi<IUserDataCreate> {
+class UserApi extends BaseApi<IUserDataCreate, IUserApi> {
   async create({ email, name, password, role, username }: IUserDataCreate) {
-    return await api.post<IUserApi>(`/users`, {
+    const response = await api.post<CustomResponse<IUserApi>>(`/users`, {
       email,
       name,
       password,
       role,
       username,
     });
+
+    const { data } = response;
+    return data;
   }
 
   async fetchAll() {
-    return await api.get<IUserApi[]>(`/users`);
+    const response = await api.get<CustomResponse<IUserApi[]>>(`/users`);
+    const { data } = response;
+    return data;
   }
 
   async fetchOneById(userId: number) {
-    return await api.get<IUserApi>(`/users/${userId}`);
+    const response = await api.get<CustomResponse<IUserApi>>(`/users/${userId}`);
+    const { data } = response;
+    return data;
   }
 
   async update(userId: number, { email, name, username }: IUserDataCreate) {
-    return await api.patch<IUserApi>(`/users/${userId}`, {
+    const response = await api.put<CustomResponse<IUserApi>>(`/users/${userId}`, {
       email,
       name,
       username,
     });
+    const { data } = response;
+    return data;
   }
 
   async delete(userId: number) {
-    return await api.patch(`/users/${userId}`);
+    const response = await api.delete<CustomResponse<null>>(`/users/${userId}`);
+    const { data } = response;
+    return data;
   }
 }
 

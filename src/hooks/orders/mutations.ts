@@ -1,28 +1,25 @@
-import { IOrderApi, OrderBody, OrderInstanceApi } from "@/api/OrderApi";
+import { OrderBody, OrderInstanceApi } from "@/api/OrderApi";
 import { useModalContext } from "@/contexts/modal-provider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { AxiosError } from "axios";
 import { toast } from "sonner";
 
 export function useOrderMutation() {
   const queryClient = useQueryClient();
 
-  return useMutation({
+  const mutation = useMutation({
     mutationFn: async (body: OrderBody) => {
-      const { data } = await OrderInstanceApi.create(body);
-      return data as IOrderApi;
+      return await OrderInstanceApi.create(body);
     },
-    onError: (error: unknown) => {
-      const message =
-        error instanceof AxiosError
-          ? error.response?.data?.message || error.message
-          : "Erro inesperado ao processar o pedido.";
-      toast.error(message);
+    onSuccess: (response) => {
+      toast.success(response.message);
+      queryClient.resetQueries({ queryKey: ["orders"] });
     },
-    onSuccess: () => {
-      toast.success(`Order created successfully!`);
+    onError: (error) => {
+      toast.error(error.message);
     },
   });
+
+  return mutation;
 }
 
 export function useOrderUpdateStatusMutation({ id }: { id: number }) {
@@ -33,7 +30,7 @@ export function useOrderUpdateStatusMutation({ id }: { id: number }) {
       return await OrderInstanceApi.updateStatus(id);
     },
     onSuccess: (response) => {
-      toast.success(response.data.message);
+      toast.success(response.message);
       queryClient.invalidateQueries({ queryKey: ["orders", { id }] });
     },
     onError: (error) => {
@@ -50,10 +47,10 @@ export function useOrderCancelMutation({ id }: { id: number }) {
 
   const mutation = useMutation({
     mutationFn: async () => {
-      await OrderInstanceApi.cancelOrder(id);
+      return await OrderInstanceApi.cancelOrder(id);
     },
-    onSuccess: () => {
-      toast.success("Order has been canceled!");
+    onSuccess: (response) => {
+      toast.success(response.message);
       queryClient.invalidateQueries({ queryKey: ["orders", { id }] });
       closeModal();
     },

@@ -1,6 +1,5 @@
 import { ProductKeys } from "@/hooks/products/filters";
-import { AxiosResponse } from "axios";
-import { api } from ".";
+import { api, CustomResponse } from ".";
 import { BaseApi, IBaseObjectApi } from "./Api";
 import { ICategoryApi } from "./CategoryApi";
 import { ICommentApi } from "./CommentApi";
@@ -53,15 +52,26 @@ interface ProductBody
   category: Pick<ICategoryApi, "id">;
 }
 
-class ProductApi extends BaseApi<ProductBody> {
+class ProductApi extends BaseApi<ProductBody, IProductApi> {
   async fetchAll(where = new Where()) {
-    return await api.get<IProductApi[]>(`/products`, { params: { where: where.build() } });
+    const response = await api.get<CustomResponse<IProductApi[]>>(`/products`, {
+      params: { where: where.build() },
+    });
+
+    const { data } = response;
+    return data;
   }
   async fetchAllFeatrued(where: Where<ProductKeys>) {
-    return await api.get<IProductApi[]>(`/products/featured`, { params: { where: where.build() } });
+    const response = await api.get<CustomResponse<IProductApi[]>>(`/products/featured`, {
+      params: { where: where.build() },
+    });
+    const { data } = response;
+    return data;
   }
   async fetchOneById(id: number) {
-    return await api.get<IProductApi>(`/products/${id}`);
+    const response = await api.get<CustomResponse<IProductApi>>(`/products/${id}`);
+    const { data } = response;
+    return data;
   }
   async create(body: ProductBody) {
     const formData = new FormData();
@@ -73,14 +83,13 @@ class ProductApi extends BaseApi<ProductBody> {
     if (body.files && body.files.length) {
       body.files.forEach((file) => formData.append("files", file));
     }
-    return await api.post(`/products`, formData, {
+    const response = await api.post<CustomResponse<IProductApi>>(`/products`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     });
-    // else {
-    //   return await api.post(`/products`, body);
-    // }
+    const { data } = response;
+    return data;
   }
   async update(productId: number, body: ProductBody) {
     const formData = new FormData();
@@ -95,33 +104,52 @@ class ProductApi extends BaseApi<ProductBody> {
       body.files.forEach((file) => formData.append("files", file));
     }
 
-    return await api.put(`/products/${productId}`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await api.put<CustomResponse<IProductApi>>(
+      `/products/${productId}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    const { data } = response;
+    return data;
   }
-  async delete(id: number): Promise<AxiosResponse> {
-    return await api.delete(`/products/${id}`);
+  async delete(id: number) {
+    const response = await api.delete<CustomResponse<null>>(`/products/${id}`);
+    const { data } = response;
+    return data;
   }
 
   async createComment(id: number, comment: string) {
-    return await api.post<IProductCommentApi>(`/products/${id}/comment`, comment);
+    const response = await api.post<CustomResponse<IProductCommentApi>>(
+      `/products/${id}/comment`,
+      comment
+    );
+    const { data } = response;
+    return data;
   }
 
   async updateComment(id: number, productCommentId: number, comment: string) {
-    return await api.put<IProductCommentApi>(
+    const response = await api.put<CustomResponse<IProductCommentApi>>(
       `/products/${id}/comment/${productCommentId}`,
       comment
     );
+    const { data } = response;
+    return data;
   }
 
   async fetchComments(id: number) {
-    return await api.get<IProductCommentApi[]>(`/products/${id}/comment`);
+    const response = await api.get<CustomResponse<IProductCommentApi[]>>(`/products/${id}/comment`);
+    const { data } = response;
+    return data;
   }
 
   async markSelecteAsFeatured(prodIds: number[]) {
-    return await api.put(`/products/mark-as-featured`, prodIds);
+    const response = await api.put<CustomResponse<null>>(`/products/mark-as-featured`, prodIds);
+    const { data } = response;
+    return data;
   }
 }
 

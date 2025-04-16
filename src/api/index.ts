@@ -39,7 +39,7 @@ api.interceptors.request.use(async (config) => {
   return config;
 });
 
-export interface IAxiosResponse<T> {
+export interface CustomResponse<T> {
   message: string;
   status: number;
   data: T;
@@ -63,7 +63,7 @@ api.interceptors.response.use(
       response.data = {
         message: response.data.message,
         data: response.data.data,
-      } as IAxiosResponse<unknown>;
+      } as CustomResponse<unknown>;
     }
 
     return response;

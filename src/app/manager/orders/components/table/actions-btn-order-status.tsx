@@ -1,9 +1,9 @@
-import { OrderStatus } from "@/api/OrderApi";
+import { OrderStatusKey } from "@/api/OrderApi";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Info, Send } from "lucide-react";
 
 interface ButtonOrderStatusActionProps {
-  status: keyof typeof OrderStatus;
+  status: OrderStatusKey;
   onClick: () => void;
 }
 
