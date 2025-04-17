@@ -14,6 +14,7 @@ import {
   Star,
   Store,
   Ticket,
+  Tickets,
   Trophy,
 } from "lucide-react";
 import Link from "next/link";
@@ -71,6 +72,12 @@ export function HeaderMenu() {
                 <DropdownMenuItem className="cursor-pointer">
                   <Store />
                   My stores
+                </DropdownMenuItem>
+              </Link>
+              <Link href="/manager/my-cupons">
+                <DropdownMenuItem className="cursor-pointer">
+                  <Tickets />
+                  Manage Cupons
                 </DropdownMenuItem>
               </Link>
             </>

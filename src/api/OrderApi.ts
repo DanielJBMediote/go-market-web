@@ -1,5 +1,6 @@
 import { api, CustomResponse } from ".";
 import { BaseApi, IBaseObjectApi } from "./Api";
+import { ICuponApi } from "./CuponApi";
 import { IProductApi } from "./ProductApi";
 import { IUserApi } from "./UserApi";
 import { Where } from "./Where";
@@ -41,6 +42,7 @@ export interface IOrderApi extends IBaseObjectApi {
   totalAmount: number;
   status: OrderStatusKey;
   paymentMethod: PaymentMethod;
+  cupon: ICuponApi | null;
 
   shippingAddress: string;
   paymentDate: Date;

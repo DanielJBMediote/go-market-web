@@ -1,16 +1,18 @@
 "use client";
 
 import { API_URL } from "@/api";
+import { ICuponApi } from "@/api/CuponApi";
 import { IProductApi } from "@/api/ProductApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { CheckoutContextForm, useCheckoutContext } from "@/contexts/checkout-provider";
 import { useClientCartContext } from "@/contexts/client-cart-provider";
+import { useCuponValidateMutation } from "@/hooks/cupons/mutations";
 import { formatCurrency } from "@/utils/math-utils";
 import { ImageOff, Minus, Plus, ShoppingCart, Trash2 } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 
 export function CartSummary() {
@@ -20,8 +22,11 @@ export function CartSummary() {
   const { setValue } = useFormContext<CheckoutContextForm>();
   // const { userContext } = useAuthentication();
 
-  const [discount, setDiscount] = useState(0);
-  const [coupon, setCoupon] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const [cupon, setCupon] = useState<ICuponApi | null>(null);
+  const [cuponCode, setCuponCode] = useState("");
+  const [discount, setDiscount] = useState(cupon ? cupon.percentDiscount : 0);
 
   const shipping = 0;
   const subtotal = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
@@ -39,7 +44,14 @@ export function CartSummary() {
     removeItem(productId);
   }
 
-  function handleApplyCupon() {}
+  const { mutateAsync, isPending } = useCuponValidateMutation();
+
+  async function handleApplyCupon() {
+    const { data } = await mutateAsync(cuponCode);
+    setCupon(data);
+    setDiscount(subtotal * (data.percentDiscount / 100));
+    setCuponCode("");
+  }
 
   useEffect(() => {
     if (!items.length) return;
@@ -50,7 +62,8 @@ export function CartSummary() {
     setValue("taxes", shipping);
     setValue("discount", discount);
     setValue("totalAmount", totalAmount);
-  }, [items, discount, totalAmount, setValue]);
+    setValue("cupon", cupon);
+  }, [items, discount, totalAmount, setValue, cupon]);
 
   return (
     <div className="w-full space-y-4 p-6">
@@ -143,20 +156,27 @@ export function CartSummary() {
           <span>{formatCurrency(totalAmount)}</span>
         </div>
       </div>
-
+      {cupon && (
+        <div className="flex gap-2 items-center">
+          <Text variant="span" color="primary">
+            {cupon.cuponCode}
+          </Text>
+          <Text variant="flag" color="foreground">
+            Applied!
+          </Text>
+        </div>
+      )}
       <div className="flex gap-2 pt-4">
         <Input
+          ref={inputRef}
           type="text"
           placeholder="Discont Cupon"
           className="flex-1 border rounded-lg px-3 py-2 text-sm"
-          // value={coupon}
-          // onChange={e => setCoupon(e.target.value)}
+          value={cuponCode}
+          onChange={(e) => setCuponCode(e.target.value)}
         />
-        <Button
-          type="button"
-          // onClick={applyCoupon}
-        >
-          Aplicar
+        <Button type="button" onClick={handleApplyCupon} isLoading={isPending}>
+          Apply
         </Button>
       </div>
       <Button

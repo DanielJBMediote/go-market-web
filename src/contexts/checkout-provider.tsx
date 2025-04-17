@@ -1,5 +1,6 @@
 "use client";
 
+import { ICuponApi } from "@/api/CuponApi";
 import { IOrderApi, PaymentMethod } from "@/api/OrderApi";
 import { IProductApi } from "@/api/ProductApi";
 import { Form } from "@/components/ui/form";
@@ -35,6 +36,7 @@ const checkoutSchema = z.object({
   totalAmount: z.number().default(0),
   discount: z.number().default(0),
   taxes: z.number().default(0),
+  cupon: z.custom<ICuponApi>().nullable(),
 });
 
 export type CheckoutContextForm = z.infer<typeof checkoutSchema>;
@@ -88,6 +90,7 @@ export function CheckoutProvider({ children }: PropsWithChildren) {
       totalAmount: data.totalAmount,
       discount: data.discount,
       taxes: data.taxes,
+      cupon: data.cupon,
     };
 
     const { data: orderDetail } = await mutateAsync(body);

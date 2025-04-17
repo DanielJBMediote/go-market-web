@@ -2,9 +2,11 @@
 
 import { ProductFilter } from "@/components/product-filters";
 import { Loading } from "@/components/ui/loading";
+import { Text } from "@/components/ui/text";
 import { useProductFilters } from "@/hooks/products/filters";
 import { useProductsFeaturedQuery } from "@/hooks/products/queries";
 import { useEffect } from "react";
+import { AvailableCuponsSections } from "./components/available-cupons-sections";
 import { ProductCard } from "./components/products-card";
 
 export default function DashboardPage() {
@@ -17,7 +19,10 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-xl text-foreground">Available products</p>
+      <Text variant="title" color="primary">
+        Available products
+      </Text>
+      <AvailableCuponsSections />
       <ProductFilter.Root>
         <ProductFilter.DescriptionField />
         <ProductFilter.CategoryField />

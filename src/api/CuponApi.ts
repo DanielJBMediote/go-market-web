@@ -1,7 +1,8 @@
 import { api, CustomResponse } from ".";
 import { BaseApi, IBaseObjectApi } from "./Api";
+import { Where } from "./Where";
 
-interface ICuponApi extends IBaseObjectApi {
+export interface ICuponApi extends IBaseObjectApi {
   used: number;
   maxUsed: number;
   cuponCode: string;
@@ -10,25 +11,42 @@ interface ICuponApi extends IBaseObjectApi {
   expiredDate: Date;
 }
 
-type CuponBody = Omit<ICuponApi, "id" | "createdAt" | "updatedAt" | "expired" | "used">;
+export type CuponBody = Omit<ICuponApi, "id" | "createdAt" | "updatedAt" | "expired" | "used">;
 
 class CuponApi extends BaseApi<CuponBody, ICuponApi> {
   async create(body: CuponBody): Promise<CustomResponse<ICuponApi>> {
-    const response = await api.post<CustomResponse<ICuponApi>>(`/cupons`, body);
+    const response = await api.post(`/cupons`, body);
     const { data } = response;
     return data;
   }
 
-  fetchAll(): Promise<CustomResponse<ICuponApi[]>> {
-    throw new Error("Method not implemented.");
+  async fetchAll(where = new Where()): Promise<CustomResponse<ICuponApi[]>> {
+    const response = await api.get(`/cupons`, { params: { where: where.build() } });
+    const { data } = response;
+    return data;
   }
-  fetchOneById(id: number): Promise<CustomResponse<ICuponApi>> {
-    throw new Error("Method not implemented.");
+
+  async fetchOneById(id: number): Promise<CustomResponse<ICuponApi>> {
+    const response = await api.get(`/cupons/${id}`);
+    const { data } = response;
+    return data;
   }
-  update(id: number, body: CuponBody): Promise<CustomResponse<ICuponApi>> {
-    throw new Error("Method not implemented.");
+
+  async update(id: number, body: CuponBody): Promise<CustomResponse<ICuponApi>> {
+    const response = await api.post(`/cupons/${id}`, body);
+    const { data } = response;
+    return data;
   }
+
   delete(id: number): Promise<CustomResponse<null>> {
     throw new Error("Method not implemented.");
   }
+
+  async validate(code: string): Promise<CustomResponse<ICuponApi>> {
+    const response = await api.get(`/cupons/use/${code}`);
+    const { data } = response;
+    return data;
+  }
 }
+
+export const CuponInstanceApi = new CuponApi();
