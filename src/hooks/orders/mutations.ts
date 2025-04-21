@@ -31,7 +31,7 @@ export function useOrderUpdateStatusMutation({ id }: { id: number }) {
     },
     onSuccess: (response) => {
       toast.success(response.message);
-      queryClient.invalidateQueries({ queryKey: ["orders", { id }] });
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
     },
     onError: (error) => {
       toast.error(error.message);

@@ -37,7 +37,7 @@ const productFilterSchema = z.object({
 export type ProductFilterForm = z.infer<typeof productFilterSchema>;
 
 function Root({ children }: PropsWithChildren) {
-  const { setFilter, filters, resetFilters, removeFilter } = useProductFilters();
+  const { setFilter, clearFilters, resetFilter } = useProductFilters();
 
   const methods = useForm<ProductFilterForm>({
     resolver: zodResolver(productFilterSchema),
@@ -60,32 +60,32 @@ function Root({ children }: PropsWithChildren) {
       setFilter("name", data.name, "LIKE");
       // setFilter("description", data.name, "LIKE");
     } else {
-      removeFilter("name");
+      resetFilter("name");
       // removeFilter("description");
     }
 
     if (data.lowestPrice !== null) {
       setFilter("price", data.lowestPrice, "GREATER_THAN_OR_EQUALS");
     } else {
-      removeFilter("price", "GREATER_THAN_OR_EQUALS");
+      resetFilter("price", "GREATER_THAN_OR_EQUALS");
     }
 
     if (data.highestPrice !== null) {
       setFilter("price", data.highestPrice, "LESS_THAN_OR_EQUALS");
     } else {
-      removeFilter("price", "LESS_THAN_OR_EQUALS");
+      resetFilter("price", "LESS_THAN_OR_EQUALS");
     }
 
     if (data.isActive !== null) {
       setFilter("isActive", data.isActive, "EQUALS");
     } // Filtro booleanoe
     else {
-      removeFilter("isActive");
+      resetFilter("isActive");
     }
 
     if (data.category) {
       if (data.category == "all") {
-        removeFilter("category.id");
+        resetFilter("category.id");
       } else {
         const categoryId = Number(data.category);
         setFilter("category.id", categoryId, "EQUALS");
@@ -94,7 +94,7 @@ function Root({ children }: PropsWithChildren) {
   }
 
   function handleResetFilters() {
-    resetFilters();
+    clearFilters();
     methods.reset();
   }
 

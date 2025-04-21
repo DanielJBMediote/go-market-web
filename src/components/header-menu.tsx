@@ -74,7 +74,7 @@ export function HeaderMenu() {
                   My stores
                 </DropdownMenuItem>
               </Link>
-              <Link href="/manager/my-cupons">
+              <Link href="/manager/cupons">
                 <DropdownMenuItem className="cursor-pointer">
                   <Tickets />
                   Manage Cupons

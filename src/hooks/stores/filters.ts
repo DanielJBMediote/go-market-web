@@ -12,8 +12,8 @@ type States = {
 
 type Actions = {
   setFilter: (key: StoreKeys, value: ValueTypes, operator: WhereOperatorType) => void;
-  resetFilters: () => void;
-  removeFilter: (filterKey: StoreKeys) => void;
+  resetFilter: (filterKey: StoreKeys) => void;
+  clearFilters: () => void;
 };
 
 const initialState: States = {
@@ -34,10 +34,10 @@ export const useStoreFilters = create<States & Actions>()(
           })
         );
       },
-      resetFilters: () => {
+      clearFilters: () => {
         set({ ...initialState });
       },
-      removeFilter: (filterKey: StoreKeys) => {
+      resetFilter: (filterKey: StoreKeys) => {
         set((state) => ({
           ...state,
           filters: state.filters.filter((f) => f.key !== filterKey),

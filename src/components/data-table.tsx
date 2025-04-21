@@ -215,7 +215,6 @@ export function DataTable<TData>({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
-    // onRowSelectionChange: setRowSelection,
     onRowSelectionChange: (updater) => {
       const newRowSelection = typeof updater === "function" ? updater(rowSelection) : updater;
       setRowSelection(newRowSelection);
@@ -230,10 +229,6 @@ export function DataTable<TData>({
       columnFilters,
       columnVisibility,
       rowSelection,
-      // pagination: {
-      //   pageSize: pagination.defaultItemsPerPage,
-      //   pageIndex: pagination.pageIndex || 0,
-      // },
     },
   });
 

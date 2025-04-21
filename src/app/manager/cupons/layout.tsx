@@ -3,8 +3,8 @@ import { Metadata } from "next";
 import { PropsWithChildren } from "react";
 
 export const metadata: Metadata = {
-  title: "Go Market | My Stores",
-  description: "Your store list and details of products.",
+  title: "Go Market | Cupons",
+  description: "Create your cupons.",
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {

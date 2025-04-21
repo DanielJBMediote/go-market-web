@@ -1,20 +1,20 @@
-import { IOrderApi } from "@/api/OrderApi";
+import { ICuponApi } from "@/api/CuponApi";
 import { WhereOperatorType } from "@/api/Where";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { Filter, handleFilter, NestedKeys } from "../handle-filter";
 
-export type OrderKeys = NestedKeys<IOrderApi>;
+export type CuponsKeys = NestedKeys<ICuponApi>;
 
 type State = {
-  filters: Filter<OrderKeys>[];
+  filters: Filter<CuponsKeys>[];
 };
 
 type FilterValues = string | number | Date | boolean | null;
 
 type Actions = {
-  setFilter: (filterKey: OrderKeys, value: FilterValues, operator: WhereOperatorType) => void;
-  resetFilter: (filterKey: OrderKeys, operator?: WhereOperatorType) => void;
+  setFilter: (filterKey: CuponsKeys, value: FilterValues, operator: WhereOperatorType) => void;
+  resetFilter: (filterKey: CuponsKeys, operator?: WhereOperatorType) => void;
   clearFilters: () => void;
 };
 
@@ -22,13 +22,13 @@ const initialState: State = {
   filters: [],
 };
 
-export const useOrderFilters = create<State & Actions>()(
+export const useCuponsFilters = create<State & Actions>()(
   persist(
     (set) => ({
       ...initialState,
-      setFilter: (key: OrderKeys, value: FilterValues, operator: WhereOperatorType) => {
+      setFilter: (key: CuponsKeys, value: FilterValues, operator: WhereOperatorType) => {
         set((state) =>
-          handleFilter<OrderKeys, State & Actions>({
+          handleFilter<CuponsKeys, State & Actions>({
             state,
             key,
             value,
@@ -36,7 +36,7 @@ export const useOrderFilters = create<State & Actions>()(
           })
         );
       },
-      resetFilter: (filterKey: OrderKeys, operator?: WhereOperatorType) => {
+      resetFilter: (filterKey: CuponsKeys, operator?: WhereOperatorType) => {
         set((state) => ({
           ...state,
           filters: state.filters.filter(
@@ -49,7 +49,7 @@ export const useOrderFilters = create<State & Actions>()(
       },
     }),
     {
-      name: "@go-market-zustand-storage:orders-filters",
+      name: "@go-market-zustand-storage:cupons-filters",
       storage: createJSONStorage(() => localStorage),
     }
   )

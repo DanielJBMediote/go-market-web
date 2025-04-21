@@ -1,6 +1,5 @@
 "use client";
 
-import { PaymentMethod } from "@/api/OrderApi";
 import { FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { RadioGroupItem } from "@/components/ui/radio-group";
 import { Text } from "@/components/ui/text";
@@ -13,17 +12,17 @@ import { useFormContext } from "react-hook-form";
 export const paymentMethodList = [
   {
     name: "Cash",
-    value: PaymentMethod.CASH,
+    value: "CASH",
     icon: DollarSign,
   },
   {
     name: "Credit Card",
-    value: PaymentMethod.CREDIT_CARD,
+    value: "CREDIT_CARD",
     icon: CreditCard,
   },
   {
     name: "Debit Card",
-    value: PaymentMethod.DEBIT_CARD,
+    value: "DEBIT_CARD",
     icon: Banknote,
   },
 ];

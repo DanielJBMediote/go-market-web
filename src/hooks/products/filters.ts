@@ -14,8 +14,8 @@ type FilterValues = string | number | Date | boolean | null;
 
 type Actions = {
   setFilter: (filterKey: ProductKeys, value: FilterValues, operator: WhereOperatorType) => void;
-  removeFilter: (filterkey: ProductKeys, operator?: WhereOperatorType) => void;
-  resetFilters: () => void;
+  resetFilter: (filterkey: ProductKeys, operator?: WhereOperatorType) => void;
+  clearFilters: () => void;
 };
 
 const initialState: State = {
@@ -36,7 +36,7 @@ export const useProductFilters = create<State & Actions>()(
           })
         );
       },
-      removeFilter: (filterKey: ProductKeys, operator?: WhereOperatorType) => {
+      resetFilter: (filterKey: ProductKeys, operator?: WhereOperatorType) => {
         set((state) => ({
           ...state,
           filters: state.filters.filter(
@@ -44,7 +44,7 @@ export const useProductFilters = create<State & Actions>()(
           ),
         }));
       },
-      resetFilters: () => {
+      clearFilters: () => {
         set({ ...initialState });
       },
     }),

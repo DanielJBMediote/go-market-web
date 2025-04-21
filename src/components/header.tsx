@@ -36,9 +36,11 @@ export function Header() {
         <Button className="font-semibold text-md" variant="link">
           Categories
         </Button>
-        <Button className="font-semibold text-md" variant="link">
-          Stores
-        </Button>
+        <Link href="/stores">
+          <Button className="font-semibold text-md" variant="link">
+            Stores
+          </Button>
+        </Link>
         <Link href="/products/checkout">
           <Button className="relative" variant="link" size="icon">
             <p className="absolute -top-2 -right-2 text-primary w-5 h-5 flex items-center justify-center text-xs rounded-full p-0.5">

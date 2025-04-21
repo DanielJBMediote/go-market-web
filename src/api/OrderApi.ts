@@ -6,9 +6,9 @@ import { IUserApi } from "./UserApi";
 import { Where } from "./Where";
 
 export enum PaymentMethod {
-  CASH = "CASH",
-  CREDIT_CARD = "CREDIT_CARD",
-  DEBIT_CARD = "DEBIT_CARD",
+  CASH = "Cash",
+  CREDIT_CARD = "Credit Card",
+  DEBIT_CARD = "Debit Card",
 }
 
 export enum OrderStatus {
