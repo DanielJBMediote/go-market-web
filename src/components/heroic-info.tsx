@@ -90,6 +90,7 @@ export function HeroicInfo() {
               alt=""
               width={500}
               height={500}
+              loading="eager"
             />
           </motion.div>
         </AnimatePresence>
