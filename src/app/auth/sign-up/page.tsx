@@ -1,6 +1,7 @@
 "use client";
 
 import { IAxiosErr } from "@/api";
+import { AuthInstanceApi } from "@/api/AuthApi";
 import { Roles, UserInstanceApi } from "@/api/UserApi";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,9 +25,9 @@ import * as z from "zod";
 const signUpSchema = z.object({
   username: z.string().min(1),
   name: z.string().min(1),
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(6),
-  role: z.nativeEnum(Roles),
+  role: z.enum(Roles),
 });
 
 type SignUpType = z.infer<typeof signUpSchema>;
@@ -34,8 +35,11 @@ type SignUpType = z.infer<typeof signUpSchema>;
 export default function SignUpPage() {
   const router = useRouter();
 
-  const methods = useForm({
+  const methods = useForm<z.input<typeof signUpSchema>, unknown, SignUpType>({
     resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      role: Roles.CLIENT,
+    },
   });
 
   async function handleSignUp(data: SignUpType) {
@@ -147,14 +151,13 @@ export default function SignUpPage() {
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value}
                       className="flex items-center justify-center"
                     >
                       <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="client" className="hidden" />
-                        </FormControl>
+                        <RadioGroupItem id="role-client" value={Roles.CLIENT} />
                         <FormLabel
+                          htmlFor="role-client"
                           data-state={field.value == Roles.CLIENT ? "active" : "disabled"}
                           className="py-3 px-8 border cursor-pointer data-[state=active]:text-white data-[state=active]:bg-primary rounded text-foreground"
                         >
@@ -163,10 +166,9 @@ export default function SignUpPage() {
                         </FormLabel>
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
-                        <FormControl>
-                          <RadioGroupItem value="manager" />
-                        </FormControl>
+                        <RadioGroupItem id="role-manager" value={Roles.MANAGER} />
                         <FormLabel
+                          htmlFor="role-manager"
                           data-state={field.value == Roles.MANAGER ? "active" : "disabled"}
                           className="py-3 px-8 border cursor-pointer data-[state=active]:text-white data-[state=active]:bg-primary rounded text-foreground"
                         >

@@ -1,5 +1,5 @@
-import { api } from ".";
-import { IUserApi } from "./UserApi";
+import { api, CustomResponse } from ".";
+import type { IUserApi, IUserDataCreate } from "./UserApi";
 
 export interface IAuthData {
   username: string;
@@ -11,6 +11,10 @@ export interface IUserContext extends Omit<IUserApi, "password"> {
 }
 
 class AuthApi {
+  async signUp(data: IUserDataCreate) {
+    return await api.post<CustomResponse<IUserApi>>(`/auth/sign-up`, data);
+  }
+
   async signIn({ username, password }: IAuthData) {
     return await api.post<IUserContext>(`/auth/sign-in`, { username, password });
   }
