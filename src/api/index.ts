@@ -47,9 +47,15 @@ export interface IAxiosErr {
 
 api.interceptors.response.use(
   (response) => {
-    if (response.data?.message || response.data?.data) {
+    if (
+      response.data &&
+      typeof response.data === "object" &&
+      (response.data.message || response.data.data)
+    ) {
       response.data = {
+        ...response.data,
         message: response.data.message,
+        status: response.data.status ?? response.status,
         data: response.data.data,
       } as CustomResponse<unknown>;
     }

@@ -1,7 +1,6 @@
 "use client";
 
 import { IAxiosErr } from "@/api";
-import { AuthInstanceApi } from "@/api/AuthApi";
 import { Roles, UserInstanceApi } from "@/api/UserApi";
 import { Button } from "@/components/ui/button";
 import {
@@ -52,8 +51,7 @@ export default function SignUpPage() {
         username,
         role,
       });
-
-      if (response.status == 201) {
+      if ([200, 201].includes(response.status)) {
         toast.success("User created successfully!", {
           action: {
             onClick: () => {
@@ -66,7 +64,7 @@ export default function SignUpPage() {
     } catch (error) {
       const err = error as IAxiosErr;
       toast.error(err.message);
-      console.error(error);
+      // console.error(error);
     }
   }
 

@@ -1,10 +1,11 @@
 import { AuthInstanceApi } from "./AuthApi";
 import { api, CustomResponse } from ".";
-import { BaseApi, IBaseObjectApi } from "./Api";
+import { IBaseObjectApi } from "./Api";
+import type { AxiosResponse } from "axios";
 
 export enum Roles {
-  CLIENT = "client",
-  MANAGER = "manager",
+  CLIENT = "CLIENT",
+  MANAGER = "MANAGER",
 }
 
 export interface IUserApi extends IBaseObjectApi {
@@ -18,11 +19,9 @@ export interface IUserApi extends IBaseObjectApi {
 export type IUserDataCreate = Omit<IUserApi, "id" | "createdAt" | "updatedAt">;
 export type IUserDataRead = Omit<IUserApi, "password">;
 
-class UserApi extends BaseApi<IUserDataCreate, IUserApi> {
-
-  async create(body: IUserDataCreate) {
-    const response = await AuthInstanceApi.signUp(body);
-    return response.data;
+class UserApi {
+  async create(body: IUserDataCreate): Promise<AxiosResponse<CustomResponse<IUserApi>>> {
+    return AuthInstanceApi.signUp(body);
   }
 
   async fetchAll() {
