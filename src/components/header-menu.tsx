@@ -1,6 +1,7 @@
 import { Roles } from "@/api/UserApi";
 import { useAuthentication } from "@/contexts/auth-provider";
 import {
+  ChartPieIcon,
   CreditCard,
   Heart,
   MapPin,
@@ -62,6 +63,12 @@ export function HeaderMenu() {
           <DropdownMenuSeparator />
           {userContext && userContext.role == Roles.MANAGER ? (
             <>
+              <Link href="/manager/dashboard">
+                <DropdownMenuItem className="cursor-pointer">
+                  <ChartPieIcon />
+                  Dashboard
+                </DropdownMenuItem>
+              </Link>
               <Link href="/manager/orders">
                 <DropdownMenuItem className="cursor-pointer">
                   <Package2 />

@@ -3,7 +3,7 @@ import { CancelConfirmationDialog } from "@/components/cancel-confirmation-dialo
 import { Button } from "@/components/ui/button";
 import { useModalContext } from "@/contexts/modal-provider";
 import { useOrderCancelMutation, useOrderUpdateStatusMutation } from "@/hooks/orders/mutations";
-import { Row } from "@tanstack/react-table";
+import type { LegacyRow as Row } from "@tanstack/react-table/legacy";
 import { Info, X } from "lucide-react";
 import { OrderInfoDetailModal } from "../order-detail-modal";
 import { ButtonOrderStatusAction } from "./actions-btn-order-status";

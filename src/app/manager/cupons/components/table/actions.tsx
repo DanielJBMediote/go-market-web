@@ -2,7 +2,7 @@ import { ICuponApi } from "@/api/CuponApi";
 import { CancelConfirmationDialog } from "@/components/cancel-confirmation-dialog";
 import { Button } from "@/components/ui/button";
 import { useModalContext } from "@/contexts/modal-provider";
-import { Row } from "@tanstack/react-table";
+import type { LegacyRow as Row } from "@tanstack/react-table/legacy";
 import { Pencil, Trash2 } from "lucide-react";
 
 export function TableCuponsActions({ row }: { row: Row<ICuponApi> }) {

@@ -8,20 +8,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { SelectValue } from "@radix-ui/react-select";
+import { flexRender } from "@tanstack/react-table";
+import type { ColumnFiltersState, RowData, SortingState } from "@tanstack/react-table";
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
-  Table as ReactTable,
-  SortingState,
-  useReactTable,
-  VisibilityState,
-} from "@tanstack/react-table";
+  useLegacyTable as useReactTable,
+} from "@tanstack/react-table/legacy";
+import type {
+  LegacyColumnDef as ColumnDef,
+  LegacyReactTable as ReactTable,
+} from "@tanstack/react-table/legacy";
 import React from "react";
 import {
   Pagination,
@@ -31,7 +30,9 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "./ui/pagination";
-import { Select, SelectContent, SelectItem, SelectTrigger } from "./ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+
+type VisibilityState = Record<string, boolean>;
 
 interface TablePaginationOptions {
   pageIndex?: number;
@@ -46,24 +47,24 @@ interface TablePaginationOptions {
   onNextPageClick?: () => void;
 }
 
-interface DataTableProps<TData> {
+interface DataTableProps<TData extends RowData> {
   data: TData[];
   columns: ColumnDef<TData>[];
   pagination?: TablePaginationOptions;
   onRowSelectionChange?: (selected: TData[]) => void;
 }
 
-interface ClientSideTableProps<TData> {
+interface ClientSideTableProps<TData extends RowData> {
   table: ReactTable<TData>;
   columns: ColumnDef<TData>[];
 }
 
-interface TablePaginationProps<TData> {
+interface TablePaginationProps<TData extends RowData> {
   table: ReactTable<TData>;
   options: TablePaginationOptions;
 }
 
-function ClientSideTable<TData>({ table, columns }: ClientSideTableProps<TData>) {
+function ClientSideTable<TData extends RowData>({ table, columns }: ClientSideTableProps<TData>) {
   return (
     <Table>
       <TableHeader>
@@ -102,7 +103,7 @@ function ClientSideTable<TData>({ table, columns }: ClientSideTableProps<TData>)
   );
 }
 
-function TablePagination<TData>({
+function TablePagination<TData extends RowData>({
   table,
   options: {
     itemsPerPageOptions = [10, 20, 30, 40, 50],
@@ -192,7 +193,7 @@ function TablePagination<TData>({
   );
 }
 
-export function DataTable<TData>({
+export function DataTable<TData extends RowData>({
   columns,
   data,
   onRowSelectionChange,

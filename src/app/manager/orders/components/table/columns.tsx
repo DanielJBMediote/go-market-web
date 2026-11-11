@@ -2,7 +2,7 @@ import { IOrderApi, IOrderItemApi, OrderStatusKey } from "@/api/OrderApi";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Text } from "@/components/ui/text";
-import { ColumnDef } from "@tanstack/react-table";
+import type { LegacyColumnDef as ColumnDef } from "@tanstack/react-table/legacy";
 import { ArrowUpDown } from "lucide-react";
 import { TableOrderActions } from "./actions";
 import { OrderStatusFlag } from "./order-status-flag";

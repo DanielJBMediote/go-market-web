@@ -3,11 +3,11 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import type { ChartConfig } from "@/components/ui/chart";
 import { formatCurrency } from "@/utils/math-utils";
 import * as React from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
@@ -107,10 +107,12 @@ export function RevenueChartSellers({ chartData }: RevenueChartSellersProps) {
             <ChartTooltip
               content={
                 <ChartTooltipContent
-                  className="w-[150px]"
+                  className="w-37.5"
                   nameKey={activeChart}
                   labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString("en-US", {
+                    const dateValue =
+                      typeof value === "string" || typeof value === "number" ? value : "";
+                    return new Date(dateValue).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
                       year: "numeric",

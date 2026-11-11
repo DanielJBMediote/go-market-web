@@ -4,7 +4,7 @@ import { IProductApi } from "@/api/ProductApi";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { formatCurrency } from "@/utils/math-utils";
-import { ColumnDef } from "@tanstack/react-table";
+import type { LegacyColumnDef as ColumnDef } from "@tanstack/react-table/legacy";
 import { ArrowDown, ArrowUp, ArrowUpDown, ImageOff } from "lucide-react";
 import Image from "next/image";
 import { TableProductActions } from "./actions";

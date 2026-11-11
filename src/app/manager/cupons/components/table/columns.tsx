@@ -2,7 +2,7 @@ import { ICuponApi } from "@/api/CuponApi";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Text } from "@/components/ui/text";
-import { ColumnDef } from "@tanstack/react-table";
+import type { LegacyColumnDef as ColumnDef } from "@tanstack/react-table/legacy";
 import { ArrowUpDown } from "lucide-react";
 import { TableCuponsActions } from "./actions";
 

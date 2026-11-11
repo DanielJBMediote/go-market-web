@@ -3,7 +3,7 @@ import { CancelConfirmationDialog } from "@/components/cancel-confirmation-dialo
 import { Button } from "@/components/ui/button";
 import { useModalContext } from "@/contexts/modal-provider";
 import { useProductDeleteMutation } from "@/hooks/products/mutations";
-import { Row } from "@tanstack/react-table";
+import type { LegacyRow as Row } from "@tanstack/react-table/legacy";
 import { Pencil, Trash2 } from "lucide-react";
 import { ProductFormModal } from "../product-modal-form";
 
