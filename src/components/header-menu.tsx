@@ -43,16 +43,16 @@ export function HeaderMenu() {
           <MenuIcon />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="mr-6 w-64">
+      <DropdownMenuContent className="mr-6 min-w-64">
         <DropdownMenuGroup>
           <DropdownMenuLabel>Account</DropdownMenuLabel>
           <DropdownMenuItem>
             {!userContext ? (
-              <Skeleton className="w-32 h-4 bg-muted-foreground" />
+              <Skeleton className="min-w-32 h-4 bg-muted-foreground" />
             ) : (
               <div className="flex items-center gap-2">
                 <div className="rounded-full w-10 h-10 bg-gray-400 shadow" />
-                <div className="flex flex-col gap-0.5">
+                <div className="flex flex-col gap-0">
                   <p className="font-bold text-foreground">{userContext.name}</p>
                   <p className="font-light text-foreground text-sm">{userContext.email}</p>
                 </div>
